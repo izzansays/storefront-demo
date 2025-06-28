@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, Redirect, useParams } from "wouter";
 import type { Product } from "../types/Product";
+import { useCart } from "../context/CartContext";
 
 export default function Product() {
     const { id } = useParams();
@@ -27,6 +28,9 @@ export default function Product() {
         }
         fetchProduct()
     }, [])
+
+    const { addItem } = useCart();
+    const [quantity, setQuantity] = useState(1)
 
     if (loading) return <div>Loading...</div>
     if (error) return <div>Error: {error}</div>
@@ -58,11 +62,17 @@ export default function Product() {
             </table>
             <p>Quantity</p>
             <div>
-                <button>-</button>
-                <span>1</span>
-                <button>+</button>
+                <button onClick={() => setQuantity((quantity) => quantity !== 1 ? quantity - 1 : 1)}>-</button>
+                <span>{quantity}</span>
+                <button onClick={() => setQuantity((quantity) => quantity += 1)}>+</button>
             </div>
-            <button>Add to cart</button>
+            <button onClick={() => addItem({
+                id: data.id,
+                image: data.image,
+                name: data.name,
+                price: data.price,
+                quantity: quantity
+            })}>Add to cart</button>
         </>
     )
 }
