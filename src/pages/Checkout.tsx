@@ -31,42 +31,65 @@ export default function Checkout() {
     return (
         <>
             <Link href="/">Continue shopping</Link>
-            <h1>Checkout</h1>
-            <p>Review your order.</p>
+            <h1 className="mt-4 text-4xl font-bold mb-2">Checkout</h1>
+            <p className="text-gray-500 mb-8">Review your order</p>
             {items.length === 0 ?
-                <p>Your cart is empty</p>
+                <p>Your cart is empty.</p>
                 :
                 <>
-                    <p>Items</p>
-                    {items.map((item) => (
-                        <div key={item.id}>
-                            <img src={item.image} style={{ width: 50, height: 50 }} />
-                            <span>{item.name}</span>
-                            <span>{item.quantity}</span>
-                            <span>{item.price}</span>
-                            <span onClick={() => removeItem(item.id)} >Remove</span>
-                        </div>
-                    ))}
-                    <p>Shipping Method</p>
-                    <div>
-                        {shippingOptions.map(option => (
-                            <label key={option.id}>
-                                <input
-                                    type="radio"
-                                    name="shipping"
-                                    value={option.id}
-                                    checked={shipping === option.id}
-                                    onChange={() => setShipping(option.id)}
-                                />
-                                {option.label} (${option.value})
-                            </label>
+                    <p className="text-xl font-bold">Items</p>
+                    <div className="divide-y-1 max-w-[600px] mb-8">
+                        {items.map((item) => (
+                            <div key={item.id} className="flex items-center gap-4 border-gray-300 py-2">
+                                <img src={item.image} style={{ width: 50, height: 50 }} />
+                                <div className="flex flex-1 items-center gap-8">
+                                    <div className="flex flex-col flex-1 md:flex-row">
+                                        <span className="font-semibold flex-1">{item.name}</span>
+                                        <div className="flex flex-col flex-1 md:flex-row justify-between">
+                                            <span><span className="md:hidden">Quantity: </span><span className="hidden md:inline">x</span>{item.quantity}</span>
+                                            <span>${item.price * item.quantity}</span>
+                                        </div>
+                                    </div>
+                                    <span onClick={() => removeItem(item.id)} >Remove</span>
+                                </div>
+                            </div>
                         ))}
                     </div>
-                    <div>
-                        <div>Total: ${total.toFixed(2)}</div>
-                        <div>Shipping: ${shippingValue.toFixed(2)}</div>
-                        <div><strong>Grand Total: ${grandTotal.toFixed(2)}</strong></div>
+                    <p className="text-xl font-semibold mb-2">Shipping Method</p>
+                    <div className="flex flex-col gap-2 md:flex-row md:gap-4 mb-8">
+                        {shippingOptions.map(option => (
+                            <div className="flex items-center border border-gray-200 rounded-sm lg:w-[150px]">
+                                <label key={option.id} className="flex gap-4 w-full p-4 text-sm font-medium text-gray-900 hover:cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="shipping"
+                                        value={option.id}
+                                        checked={shipping === option.id}
+                                        onChange={() => setShipping(option.id)}
+                                    />
+                                    <div className="mr-4">
+                                        <p>{option.label}</p>
+                                        <p>${option.value.toFixed(2)}</p>
+                                    </div>
+                                </label>
+                            </div>
+                        ))}
                     </div>
+                    <div className="w-[300px] mb-8">
+                        <div className="flex justify-between items-center">
+                            <p className="font-semibold">Total</p>
+                            <p>${total.toFixed(2)}</p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <p className="font-semibold">Shipping</p>
+                            <p>${shippingValue.toFixed(2)}</p>
+                        </div>
+                        <div className="flex justify-between items-center">
+                            <p className="font-semibold">Grand Total</p>
+                            <p>${grandTotal.toFixed(2)}</p>
+                        </div>
+                    </div>
+                    <button className="text-white bg-blue-500 hover:bg-blue-600 hover:cursor-pointer font-medium rounded-lg text-sm px-5 py-2.5">Submit order</button>
                 </>
             }
         </>

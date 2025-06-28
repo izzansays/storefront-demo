@@ -39,40 +39,46 @@ export default function Product() {
     return (
         <>
             <Link href="/">Back to All Products</Link>
-            <img src={data.image} />
-            <h1>{data.name}</h1>
-            <p>{data.price}</p>
-            <p>{data.description}</p>
-            <p>Details</p>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>Dimensions</td>
-                        <td>{data.length} x {data.width} x {data.height}</td>
-                    </tr>
-                    <tr>
-                        <td>Weight</td>
-                        <td>{data.weight}</td>
-                    </tr>
-                    <tr>
-                        <td>Colour</td>
-                        <td>{data.colour}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p>Quantity</p>
-            <div>
-                <button onClick={() => setQuantity((quantity) => quantity !== 1 ? quantity - 1 : 1)}>-</button>
-                <span>{quantity}</span>
-                <button onClick={() => setQuantity((quantity) => quantity += 1)}>+</button>
+            <div className="mt-4 grid grid-cols-1 lg:grid-cols-2">
+                <div className="lg:w-[500px] aspect-[1/1] bg-gray-100 flex items-center justify-center overflow-hidden mb-12">
+                    <img src={data.image} className="w-full" />
+                </div>
+                <div>
+                    <h1 className="text-4xl font-bold mb-4">{data.name}</h1>
+                    <p className="text-2xl font-semibold mb-8">${data.price}</p>
+                    <p className="text-gray-500 mb-8">{data.description}</p>
+                    <p className="text-lg font-semibold mb-2">Details</p>
+                    <table className="mb-8">
+                        <tbody>
+                            <tr>
+                                <td className="text-gray-500 pr-8">Dimensions (L x W x H)</td>
+                                <td>{data.length}cm x {data.width}cm x {data.height}cm</td>
+                            </tr>
+                            <tr>
+                                <td className="text-gray-500 pr-8">Weight</td>
+                                <td>{data.weight}</td>
+                            </tr>
+                            <tr>
+                                <td className="text-gray-500 pr-8">Colour</td>
+                                <td className="capitalize">{data.colour}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p className="text-lg font-semibold mb-2">Quantity</p>
+                    <div className="flex mb-8 items-center">
+                        <button className="bg-gray-200 hover:bg-gray-300 hover:cursor-pointer rounded-lg px-3 py-1" onClick={() => setQuantity((quantity) => quantity !== 1 ? quantity - 1 : 1)}>-</button>
+                        <span className="w-24 text-center">{quantity}</span>
+                        <button className="bg-gray-200 hover:bg-gray-300 hover:cursor-pointer rounded-lg px-3 py-1" onClick={() => setQuantity((quantity) => quantity += 1)}>+</button>
+                    </div>
+                    <button onClick={() => addItem({
+                        id: data.id,
+                        image: data.image,
+                        name: data.name,
+                        price: data.price,
+                        quantity: quantity
+                    })} className="text-white bg-blue-500 hover:bg-blue-600 hover:cursor-pointer font-medium rounded-lg text-sm px-5 py-2.5">Add to Cart</button>
+                </div>
             </div>
-            <button onClick={() => addItem({
-                id: data.id,
-                image: data.image,
-                name: data.name,
-                price: data.price,
-                quantity: quantity
-            })}>Add to cart</button>
         </>
     )
 }
