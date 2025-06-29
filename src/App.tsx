@@ -3,10 +3,12 @@ import Home from './pages/Home'
 import Product from './pages/Product'
 import { CartProvider } from './context/CartContext'
 import Checkout from './pages/Checkout'
+import Nav from './components/Nav'
 
 function App() {
   return (
     <CartProvider>
+      <Nav />
       <div className='container lg:w-7xl pb-20'>
         <Switch>
           <Route path={"/"} component={Home} />

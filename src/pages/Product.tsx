@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, Redirect, useParams } from "wouter";
 import type { Product } from "../types/Product";
 import { useCart } from "../context/CartContext";
+import { ArrowLeft } from "lucide-react";
 
 export default function Product() {
     const { id } = useParams();
@@ -38,7 +39,7 @@ export default function Product() {
 
     return (
         <>
-            <Link href="/">Back to All Products</Link>
+            <Link href="/" className="inline-block"><div className="flex items-center gap-2"><ArrowLeft className="inline" size={16} />Back to All Products</div></Link>
             <div className="mt-4 grid grid-cols-1 lg:grid-cols-2">
                 <div className="lg:w-[500px] aspect-[1/1] bg-gray-100 flex items-center justify-center overflow-hidden mb-12">
                     <img src={data.image} className="w-full" />

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { Link } from "wouter";
+import { ArrowLeft, Trash2 } from "lucide-react"
 
 export default function Checkout() {
     const { items, removeItem } = useCart();
@@ -30,7 +31,7 @@ export default function Checkout() {
 
     return (
         <>
-            <Link href="/">Continue shopping</Link>
+            <Link href="/" className="inline-block"><div className="flex items-center gap-2"><ArrowLeft className="inline" size={16} />Continue shopping</div></Link>
             <h1 className="mt-4 text-4xl font-bold mb-2">Checkout</h1>
             <p className="text-gray-500 mb-8">Review your order</p>
             {items.length === 0 ?
@@ -50,7 +51,7 @@ export default function Checkout() {
                                             <span>${item.price * item.quantity}</span>
                                         </div>
                                     </div>
-                                    <span onClick={() => removeItem(item.id)} >Remove</span>
+                                    <span onClick={() => removeItem(item.id)}><Trash2 size={16} /></span>
                                 </div>
                             </div>
                         ))}
