@@ -1,69 +1,58 @@
-# React + TypeScript + Vite
+# Storefront Demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a frontend demo for an e-commerce storefront. Its objective is to demonstrate solutioning for the following requirements:
 
-Currently, two official plugins are available:
+- Fetch and display a paginated, sortable list of products (The data is mocked for the purposes of this demo).
+- View individual products in a new page with additional information such as description and technical specifications.
+- Allow for management of quantity desired in individual product pages and checkout.
+- Persist cart state between page navigations and reloads.
+- Allow for selection of shipping method, and include its price in the calculated total.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The source code is hosted at [https://github.com/izzansays/storefront-demo](https://github.com/izzansays/storefront-demo).
 
-## Expanding the ESLint configuration
+## Skills demonstrated
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+As the intention of this project is to demonstrate frontend competencies, a minimal setup of React, TypeScript, and Vite was chosen to highlight the following core skills:
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Data fetching and handling of loading and error states
+- State management with React Hooks such as useState, useEffect and useContext
+- Enforcing data structures with Typescript
+- Mobile responsive design
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## Possible enhancements
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Using a framework like Next.js or Astro to conditionally render statically at build time or server-side upon request time. For example, elements like the navigation or product filters could be statically rendered while the list of products could be server-side rendered.
+- Proper backend functionality with transactional locks. An example query might look like:  
+```sql
+BEGIN;
+
+-- Check stock and lock the row
+SELECT quantity INTO @current_stock
+FROM products
+WHERE id = $1
+FOR UPDATE;
+
+IF @current_stock < $2 THEN
+    ROLLBACK;
+    RETURN;
+END IF;
+
+-- Deduct stock
+UPDATE products
+SET quantity = quantity - $2
+WHERE id = $1;
+
+-- Insert order
+INSERT INTO orders (user_id, order_date, shipping_method, total)
+VALUES ($3, NOW(), $4, $5)
+RETURNING id INTO @order_id;
+
+-- Insert order items
+INSERT INTO order_items (order_id, product_id, quantity, price)
+VALUES (@order_id, $1, $2, $6);
+
+COMMIT;
 ```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Multi-step form management with input validation
+- Admin functionality to view orders, edit product details and manage promo codes
+- Performance optimisation with object storage for images and caching frontend artifacts on a CDN
