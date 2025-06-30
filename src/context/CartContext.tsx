@@ -1,5 +1,5 @@
 import type { Product } from "../types/Product";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 
 export type CartItem = Pick<Product, "id" | "image" | "name" | "price"> & {
@@ -15,7 +15,14 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [items, setItems] = useState<CartItem[]>([])
+    const [items, setItems] = useState<CartItem[]>(() => {
+        const stored = localStorage.getItem('cart-items')
+        return stored ? JSON.parse(stored) : []
+    })
+
+    useEffect(() => {
+        localStorage.setItem('cart-items', JSON.stringify(items))
+    }, [items])
 
     const addItem = (item: CartItem) => {
         setItems(prev => {
