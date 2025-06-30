@@ -4,7 +4,7 @@ import { useCart } from "../context/CartContext"
 
 export default function Nav() {
     const { items } = useCart();
-    const [match, params] = useRoute("/checkout");
+    const [match] = useRoute("/checkout");
 
     return (
         <nav className="bg-black text-white mb-8">

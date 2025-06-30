@@ -6,11 +6,13 @@ import { ArrowLeft } from "lucide-react";
 
 export default function Product() {
     const { id } = useParams();
-    if (!id) return <Redirect to={"/"} />
 
     const [data, setData] = useState<Product | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+
+    const { addItem } = useCart();
+    const [quantity, setQuantity] = useState(1)
 
     useEffect(() => {
         async function fetchProduct() {
@@ -28,11 +30,9 @@ export default function Product() {
             }
         }
         fetchProduct()
-    }, [])
+    }, [id])
 
-    const { addItem } = useCart();
-    const [quantity, setQuantity] = useState(1)
-
+    if (!id) return <Redirect to={"/"} />
     if (loading) return <div>Loading...</div>
     if (error) return <div>Error: {error}</div>
     if (!data) return null;
