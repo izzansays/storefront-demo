@@ -4,6 +4,7 @@ import Product from './pages/Product'
 import { CartProvider } from './context/CartContext'
 import Checkout from './pages/Checkout'
 import Nav from './components/Nav'
+import About from './pages/About'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path={"/"} component={Home} />
           <Route path={"/product/:id"} component={Product} />
           <Route path={"/checkout"} component={Checkout} />
+          <Route path={"/about"} component={About} />
         </Switch>
       </div>
     </CartProvider>
